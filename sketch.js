@@ -21,22 +21,22 @@ var enemyNum = 5;
 var enemyArray = [];
 
 function preload(){
-casImg = loadImage("images/castle.png")
-treeImg1 = loadImage("images/tree.png")
-rockImg1 = loadImage("images/rock.png")
-forest1 = loadImage("images/forest.png")
-water = loadAnimation("images/pond3.png","images/pond2.png","images/pond1.png","images/pond3.png","images/pond1.png","images/pond2.png")
-horseImg = loadAnimation("images/horse1.png","images/horse2.png","images/horse3.png","images/horse2.png")
-sTree2 = loadImage("images/stree.png")
-sTree1 = loadImage("images/stree1.png")
-sTree3 = loadImage("images/stree2.png")
-sHouse = loadImage("images/house.png")
-House3 = loadImage("images/house3.png")
-bannerImg = loadImage("images/banner.png")
-archerImg = loadImage("images/ARCHER_QUEEN.png")
-towerImg = loadImage("images/tower.png")
-archerBlack = loadImage("images/ARCHER_QUEEN1_BL.png")
-towerBlack = loadImage("images/ARCHER_QUEEN_BL.png")
+casImg = loadImage("Images/castle.png")
+treeImg1 = loadImage("Images/tree.png")
+rockImg1 = loadImage("Images/rock.png")
+forest1 = loadImage("Images/forest.png")
+water = loadAnimation("Images/pond3.png","Images/pond2.png","Images/pond1.png","Images/pond3.png","Images/pond1.png","Images/pond2.png")
+horseImg = loadAnimation("Images/horse1.png","Images/horse2.png","Images/horse3.png","Images/horse2.png")
+sTree2 = loadImage("Images/stree.png")
+sTree1 = loadImage("Images/stree1.png")
+sTree3 = loadImage("Images/stree2.png")
+sHouse = loadImage("Images/house.png")
+House3 = loadImage("Images/house3.png")
+bannerImg = loadImage("Images/banner.png")
+archerImg = loadImage("Images/ARCHER_QUEEN.png")
+towerImg = loadImage("Images/tower.png")
+archerBlack = loadImage("Images/ARCHER_QUEEN1_BL.png")
+towerBlack = loadImage("Images/ARCHER_QUEEN_BL.png")
 }
 
 function setup() {
