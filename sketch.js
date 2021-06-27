@@ -27,7 +27,7 @@ rockImg1 = loadImage("Images/rock.png")
 forest1 = loadImage("Images/forest.png")
 water = loadAnimation("Images/pond3.png","Images/pond2.png","Images/pond1.png","Images/pond3.png","Images/pond1.png","Images/pond2.png")
 horseImg = loadAnimation("Images/horse1.png","Images/horse2.png","Images/horse3.png","Images/horse2.png")
-sTree2 = loadImage("Images/stree.png")
+sTree2 = loadImage("Images/grass1.png")
 sTree1 = loadImage("Images/stree1.png")
 sTree3 = loadImage("Images/stree2.png")
 sHouse = loadImage("Images/house.png")
@@ -98,8 +98,8 @@ function draw() {
       for(var k=1;k<=enemyNum;k++){
         test=s+k
         console.log(test)
-       // test = new Enemies(horse_x_pos,370,20,20,horseImg,20,-7,0,0.25)
-       test= createSprite(horse_x_pos,370,20,20)
+        test = new Enemies(horse_x_pos,370,20,20,horseImg,20,-7,0,0.25)
+      // test= createSprite(horse_x_pos,370,20,20)
        
         enemyArray.push(test)
         console.log(enemyArray)
@@ -117,16 +117,16 @@ function draw() {
 
  
 
- for(var index=0;index<enemyArray.length;index++){
-  var spname=enemyArray[index]
+// for(var index=0;index<enemyArray.length;index++){
+//  var spname=enemyArray[index]
 
-  console.log(enemyArray[index])
-  console.log(s1)
-  if(s1.isTouching(invisible1)){
-    s1.velocityX=0
-    s1.velocityY=-5
-  }
- }
+ // console.log(enemyArray[index])
+ // console.log(s1)
+ // if(s1.isTouching(invisible1)){
+   // s1.velocityX=0
+   // s1.velocityY=-5
+ // }
+// }
    
   }
 
@@ -177,12 +177,12 @@ function Stage1(){
 }
 
 function createNonTrees(){
- createForest(200,60,35,175,sTree2,0.3,25,25)
+ createForest(175,60,35,160,sTree2,0.5,25,25)
+ createForest(210,90,930,30,sTree2,0.5,35,35)
+ createForest(390,30,75,-25,sTree2,0.5,40,30)
  createForest(220,75,75,50,sTree1,0.3,75,75)
  createForest(220,50,20,90,sHouse,0.17,75,75)
  createForest(220,50,620,500,sHouse,0.17,75,75)
- createForest(210,90,875,50,sTree2,0.3,30,25)
- createForest(210,30,435,20,sTree2,0.3,25,30)
  createForest(200,50,950,230,sTree3,0.25,75,50)
  createForest(200,50,70,300,sTree3,0.25,75,50)
  createForest(200,50,25,340,House3,0.15,75,50)
