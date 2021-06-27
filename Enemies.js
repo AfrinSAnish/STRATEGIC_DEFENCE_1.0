@@ -1,5 +1,5 @@
 class Enemies{
-    constructor(x,y,width,height,images,health,velocityX,velocityY,scale,Grp){
+    constructor(x,y,width,height,images,health,velocityX,velocityY,scale){
         this.army = createSprite(x,y,width,height)
         this.x = x;
         this.y = y;
@@ -11,9 +11,9 @@ class Enemies{
         this.army.velocityX = velocityX
         this.army.velocityY = velocityY
         this.scale = scale;
-        this.Grp = Grp;
+        //this.Grp = Grp;
         this.army.addAnimation(" ",images)
         this.army.scale = scale
-        this.Grp.add(this.army)
+       // this.Grp.add(this.army)
     }
 }
