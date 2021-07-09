@@ -3,6 +3,8 @@ var coins = 0
 var gameState = "start";
 var roadGrp,obstacleGrp,horseGrp;
 var s1,s2,s3,s4,s5;
+var pressed = 0;
+var roadImg;
 
 var posX =525;
 var posY =155;
@@ -37,12 +39,13 @@ archerImg = loadImage("Images/ARCHER_QUEEN.png")
 towerImg = loadImage("Images/tower.png")
 archerBlack = loadImage("Images/ARCHER_QUEEN1_BL.png")
 towerBlack = loadImage("Images/ARCHER_QUEEN_BL.png")
+roadImg = loadImage("Images/road.jpg")
+road1Img = loadImage("Images/road1.jpg")
 }
 
 function setup() {
   createCanvas(1300,575);
 
- // pond = createSprite(685,480,50,50)
   pond = createSprite(300,450,50,50)
   pond.addAnimation("animation",water)
   pond.scale = 0.6
@@ -61,38 +64,32 @@ function setup() {
   banner.scale=0.25
 
   archer = createSprite(1220,500)
-  if(coins<=5){
-  archer.addImage(archerImg)
-  }else{
-    archer.addImage(archerBlack)
-  }
-  archer.scale = 0.1
+  archer.scale = 0.5;
 
   tower = createSprite(1160,505)
-  if(coins<=20){
+  tower.scale = 0.25
+  if(coins>=20){
     tower.addImage(towerImg)
-
- //   if(mousePressedOver(tower)){
-  //    tower1 = createSprite(1160,505)
-  //    tower1.x = mouseX;
-  //    tower1.y = mouseY
-  //    tower1.addImage(towerImg)
-  //    console.log("BM")
-//    }
-
     }else{
       tower.addImage(towerBlack)
     }
-  tower.scale = 0.5
-
 }
 
 function draw() {
-  background("grey");  
+  background	(152,251,152);  
   drawSprites();
 
-  if(gameState === "start"){
+  console.log(pressed)
 
+  if(coins>=5){
+    archer.addImage(archerImg)
+    }else{
+      archer.addImage(archerBlack)
+    }
+
+  if(gameState === "start"){
+    enemyNum = 2;
+    coins = 12
     if(frameCount%50===0){
      
       for(var k=1;k<=enemyNum;k++){
@@ -106,27 +103,9 @@ function draw() {
         horse_x_pos+=100
       }
     }
-    coins = 5;
     createNonTrees();
-    createEnemies();
+    createArmy();
     Stage1();
-
-  //  if(horseGrp.isTouching(invisible1)){
-    //  changeVelocity();
-   //}
-
- 
-
-// for(var index=0;index<enemyArray.length;index++){
-//  var spname=enemyArray[index]
-
- // console.log(enemyArray[index])
- // console.log(s1)
- // if(s1.isTouching(invisible1)){
-   // s1.velocityX=0
-   // s1.velocityY=-5
- // }
-// }
    
   }
 
@@ -145,7 +124,6 @@ function draw() {
   textSize(15)
   text(level,1054,543)
 }
-
 
 
 function Stage1(){
@@ -177,9 +155,6 @@ function Stage1(){
 }
 
 function createNonTrees(){
- createForest(175,60,35,160,sTree2,0.5,25,25)
- createForest(210,90,930,30,sTree2,0.5,35,35)
- createForest(390,30,75,-25,sTree2,0.5,40,30)
  createForest(220,75,75,50,sTree1,0.3,75,75)
  createForest(220,50,20,90,sHouse,0.17,75,75)
  createForest(220,50,620,500,sHouse,0.17,75,75)
@@ -198,12 +173,16 @@ function createForest(endNumx,endNumy,iposX,iposY,image,scale,varX,varY){
 }
 }
 
-function createEnemies(){
- // if(frameCount%speed===0){
-  //  horse1 = new Enemies(1300,370,20,20,horseImg,20,-7,0,0.25,horseGrp)
- // }
-
- 
+function createArmy(){
+  if(mousePressedOver(archer)&&coins>=5){
+      pressed = 1;
+  }
+  if(pressed===1){
+  //  archer1 = createSprite(mouseX,mouseY,10,100);
+  //  archer1.addImage(archerImg)
+  //  archer1.scale = 0.5
+  image(archerImg,mouseX,mouseY,75,75)
+  }
 }
 
 function createRoad(){
