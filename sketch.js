@@ -5,6 +5,10 @@ var roadGrp,obstacleGrp,horseGrp;
 var s1,s2,s3,s4,s5;
 var pressed = 0;
 var roadImg;
+var healthH1 = 10
+var healthH2 = 5
+var healthH3 = 10
+var healthC = 10
 
 var posX =525;
 var posY =155;
@@ -20,7 +24,10 @@ var towerLife = 100;
 var level = 1;
 var horse1;
 var enemyNum = 5;
-var enemyArray = [];
+var archerArray = [];
+var towerArray = [];
+
+var selectDef=""
 
 function preload(){
 casImg = loadImage("Images/castle.png")
@@ -29,7 +36,6 @@ rockImg1 = loadImage("Images/rock.png")
 forest1 = loadImage("Images/forest.png")
 water = loadAnimation("Images/pond3.png","Images/pond2.png","Images/pond1.png","Images/pond3.png","Images/pond1.png","Images/pond2.png")
 horseImg = loadAnimation("Images/horse1.png","Images/horse2.png","Images/horse3.png","Images/horse2.png")
-sTree2 = loadImage("Images/grass1.png")
 sTree1 = loadImage("Images/stree1.png")
 sTree3 = loadImage("Images/stree2.png")
 sHouse = loadImage("Images/house.png")
@@ -39,8 +45,19 @@ archerImg = loadImage("Images/ARCHER_QUEEN.png")
 towerImg = loadImage("Images/tower.png")
 archerBlack = loadImage("Images/ARCHER_QUEEN1_BL.png")
 towerBlack = loadImage("Images/ARCHER_QUEEN_BL.png")
-roadImg = loadImage("Images/road.jpg")
-road1Img = loadImage("Images/road1.jpg")
+horseUp = loadAnimation("Images/horseback.png")
+horseDown = loadAnimation("Images/horse2f.png","Images/horsef.png")
+h10 = loadAnimation("Images/newHBar/11.png")
+h9 = loadAnimation("Images/newHBar/10.png")
+h8 = loadAnimation("Images/newHBar/9.png")
+h7 = loadAnimation("Images/newHBar/8.png")
+h6 = loadAnimation("Images/newHBar/7.png")
+h5 = loadAnimation("Images/newHBar/6.png")
+h4 = loadAnimation("Images/newHBar/5.png")
+h3 = loadAnimation("Images/newHBar/4.png")
+h2 = loadAnimation("Images/newHBar/3.png")
+h1 = loadAnimation("Images/newHBar/2.png")
+h0 = loadAnimation("Images/newHBar/1.png")
 }
 
 function setup() {
@@ -52,8 +69,17 @@ function setup() {
 
   createRoad();
 
-  invisible1 = createSprite(750,360,2,75)
+  invisible1 = createSprite(745,360,2,75)
   invisible1.shapeColor = "black"  
+  
+  invisible2 = createSprite(780,75,75,2)
+  invisible2.shapeColor = "black"  
+
+  invisible3 = createSprite(460,100,2,75)
+  invisible3.shapeColor = "black"  
+   
+  invisible4 = createSprite(480,550,75,2)
+  invisible4.shapeColor = "black"  
 
   roadGrp = new Group();
   treeGrp = new Group();
@@ -68,18 +94,60 @@ function setup() {
 
   tower = createSprite(1160,505)
   tower.scale = 0.25
-  if(coins>=20){
-    tower.addImage(towerImg)
-    }else{
-      tower.addImage(towerBlack)
-    }
+
+  
+  s1=new Enemies(1300,370,20,20,horseImg,20,-7,0,0.25) 
+  s2=new Enemies(1400,370,20,20,horseImg,20,-7,0,0.25) 
+  s3=new Enemies(1500,370,20,20,horseImg,20,-7,0,0.25)
+  s1.army.addAnimation("up",horseUp) 
+  s2.army.addAnimation("up",horseUp) 
+  s3.army.addAnimation("up",horseUp) 
+  
+  s1.army.addAnimation("down",horseDown) 
+  s2.army.addAnimation("down",horseDown) 
+  s3.army.addAnimation("down",horseDown) 
+
+  if(gameState === "start"){
+  healthC = 10;
+  }
+
 }
 
 function draw() {
   background	(152,251,152);  
   drawSprites();
 
-  console.log(pressed)
+  if(gameState === "start"){
+    createNonTrees();
+    createArmy();
+    Stage1();
+   coins = 100 
+  }
+   
+  changeDirection(s1,invisible1,0,-7,"up",horseUp)
+  changeDirection(s2,invisible1,0,-7,"up",horseUp)
+  changeDirection(s3,invisible1,0,-7,"up",horseUp)
+
+  changeDirection(s1,invisible2,-7,0,"left",horseImg)
+  changeDirection(s2,invisible2,-7,0,"left",horseImg)
+  changeDirection(s3,invisible2,-7,0,"left",horseImg)
+
+  changeDirection(s1,invisible3,0,7,"down",horseDown)
+  changeDirection(s2,invisible3,0,7,"down",horseDown)
+  changeDirection(s3,invisible3,0,7,"down",horseDown)
+
+  changeDirection(s1,invisible4,-7,0,"left",horseImg)
+  changeDirection(s2,invisible4,-7,0,"left",horseImg)
+  changeDirection(s3,invisible4,-7,0,"left",horseImg)
+
+//  healthBar(s2,healthH2,20,50,0.25)
+//  healthBar(s2,healthH3,20,1)
+
+  if(coins>=20){
+    tower.addImage(towerImg)
+    }else{
+      tower.addImage(towerBlack)
+    }
 
   if(coins>=5){
     archer.addImage(archerImg)
@@ -87,27 +155,21 @@ function draw() {
       archer.addImage(archerBlack)
     }
 
-  if(gameState === "start"){
-    enemyNum = 2;
-    coins = 12
-    if(frameCount%50===0){
-     
-      for(var k=1;k<=enemyNum;k++){
-        test=s+k
-        console.log(test)
-        test = new Enemies(horse_x_pos,370,20,20,horseImg,20,-7,0,0.25)
-      // test= createSprite(horse_x_pos,370,20,20)
-       
-        enemyArray.push(test)
-        console.log(enemyArray)
-        horse_x_pos+=100
-      }
+    if(s1.army.isTouching(castle)){
+      healthC = healthC-1;
+      s1.army.destroy();
     }
-    createNonTrees();
-    createArmy();
-    Stage1();
-   
-  }
+     if(s2.army.isTouching(castle)){
+      healthC = healthC-1;
+      s2.army.destroy();
+    }
+    if(s3.army.isTouching(castle)){
+      healthC = healthC-1;
+      s3.army.destroy();
+    }
+
+    healthBar(castle,healthC,30,70,0.25)
+
 
   fill("red");
   text(mouseX+','+mouseY,mouseX,mouseY)
@@ -176,13 +238,21 @@ function createForest(endNumx,endNumy,iposX,iposY,image,scale,varX,varY){
 function createArmy(){
   if(mousePressedOver(archer)&&coins>=5){
       pressed = 1;
+      selectDef ="Arch"
   }
+
   if(pressed===1){
-  //  archer1 = createSprite(mouseX,mouseY,10,100);
-  //  archer1.addImage(archerImg)
-  //  archer1.scale = 0.5
+  imageMode(CENTER)
   image(archerImg,mouseX,mouseY,75,75)
   }
+
+  if(mousePressedOver(tower)&&coins>=15){
+    pressed = 2;
+    selectDef = "Tower"
+}
+    if(pressed===2){
+    image(towerImg,mouseX,mouseY,75,75)
+}
 }
 
 function createRoad(){
@@ -192,14 +262,74 @@ function createRoad(){
   road4 = new Road(485,325,30,400)
   road5 = new Road(305,540,390,30)
 
-
- castle = createSprite(130,460,50,50)
- castle.addImage(casImg)
- castle.scale = 0.6;
+  castle = createSprite(130,460,50,50)
+  castle.addImage(casImg)
+  castle.scale = 0.6;
 }
 
-function changeVelocity(){
-     horseGrp.setVelocityXEach(0);
-     horseGrp.setVelocityYEach(-3);
-     console.log("velocity")
+function changeDirection(object,obstacle,velX,velY,str,image){
+  if(object.army.isTouching(obstacle)){
+    object.army.velocityX=velX
+    object.army.velocityY=velY
+    object.army.changeAnimation(str,image)
+  }
 }
+
+function mouseClicked(){
+if(selectDef==="Tower"&&coins>=15){
+  create(towerImg,towerArray)
+}else if(selectDef==="Arch"&&coins>=5){
+  create(archerImg,archerArray)
+}
+}
+
+function create(image,Array1){
+  var arch= createSprite(mouseX,mouseY,10,10)
+  arch.addImage(image)
+  arch.scale = 0.7
+  var position=[arch.x,arch.y]
+  Array1.push(position)
+  pressed = 0;
+}
+
+function healthBar(sprite,health,upX,upY,scale){
+  healthSprite = createSprite(sprite.x+upX,sprite.y-upY)
+  healthSprite.velocityX = sprite.velocityX;
+  healthSprite.velocityY = sprite.velocityY;
+  healthSprite.scale = scale
+  healthSprite.addAnimation("10",h10)
+  healthSprite.addAnimation("9",h9)
+  healthSprite.addAnimation("8",h8)
+  healthSprite.addAnimation("7",h7)
+  healthSprite.addAnimation("6",h6)
+  healthSprite.addAnimation("5",h5)
+  healthSprite.addAnimation("4",h4)
+  healthSprite.addAnimation("3",h3)
+  healthSprite.addAnimation("2",h2)
+  healthSprite.addAnimation("1",h1)
+  healthSprite.addAnimation("0",h0)
+  if(health===10){
+    healthSprite.changeAnimation("10",h10)
+  }else if(health===9){
+    healthSprite.changeAnimation("9",h9);
+  }else if(health===8){
+    healthSprite.changeAnimation("8",h8);
+  }else if(health===7){
+    healthSprite.changeAnimation("7",h7);
+  }else if(health===6){
+    healthSprite.changeAnimation("6",h6);
+  }else if(health===5){
+    healthSprite.changeAnimation("5",h5);
+  }else if(health===4){
+    healthSprite.changeAnimation("4",h4);
+  }else if(health===3){
+    healthSprite.changeAnimation("3",h3);
+  }else if(health===2){
+    healthSprite.changeAnimation("2",h2);
+  }else if(health===1){
+    healthSprite.changeAnimation("1",h1);
+  }else if(health===0){
+    healthSprite.changeAnimation("0",h0);
+  }
+}
+

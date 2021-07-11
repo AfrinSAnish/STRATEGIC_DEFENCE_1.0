@@ -12,7 +12,7 @@ class Enemies{
         this.army.velocityY = velocityY
         this.scale = scale;
         //this.Grp = Grp;
-        this.army.addAnimation(" ",images)
+        this.army.addAnimation("left",images)
         this.army.scale = scale
        // this.Grp.add(this.army)
     }
