@@ -47,17 +47,17 @@ archerBlack = loadImage("Images/ARCHER_QUEEN1_BL.png")
 towerBlack = loadImage("Images/ARCHER_QUEEN_BL.png")
 horseUp = loadAnimation("Images/horseback.png")
 horseDown = loadAnimation("Images/horse2f.png","Images/horsef.png")
-h10 = loadAnimation("Images/newHBar/11.png")
-h9 = loadAnimation("Images/newHBar/10.png")
-h8 = loadAnimation("Images/newHBar/9.png")
-h7 = loadAnimation("Images/newHBar/8.png")
-h6 = loadAnimation("Images/newHBar/7.png")
-h5 = loadAnimation("Images/newHBar/6.png")
-h4 = loadAnimation("Images/newHBar/5.png")
-h3 = loadAnimation("Images/newHBar/4.png")
-h2 = loadAnimation("Images/newHBar/3.png")
-h1 = loadAnimation("Images/newHBar/2.png")
-h0 = loadAnimation("Images/newHBar/1.png")
+h10 = loadImage("Images/newHBar/11.png")
+h9 = loadImage("Images/newHBar/10.png")
+h8 = loadImage("Images/newHBar/9.png")
+h7 = loadImage("Images/newHBar/8.png")
+h6 = loadImage("Images/newHBar/7.png")
+h5 = loadImage("Images/newHBar/6.png")
+h4 = loadImage("Images/newHBar/5.png")
+h3 = loadImage("Images/newHBar/4.png")
+h2 = loadImage("Images/newHBar/3.png")
+h1 = loadImage("Images/newHBar/2.png")
+h0 = loadImage("Images/newHBar/1.png")
 }
 
 function setup() {
@@ -99,6 +99,17 @@ function setup() {
   s1=new Enemies(1300,370,20,20,horseImg,20,-7,0,0.25) 
   s2=new Enemies(1400,370,20,20,horseImg,20,-7,0,0.25) 
   s3=new Enemies(1500,370,20,20,horseImg,20,-7,0,0.25)
+
+  hlth1=new Enemies(1300,340,20,20,h10,20,-7,0,0.2)
+  hlth2=new Enemies(1400,340,20,20,h10,20,-7,0,0.2)
+  hlth3=new Enemies(1500,340,20,20,h10,20,-7,0,0.2)
+  //healthBar(s1,healthH1,30,70,0.25)
+ // s1Health = createSprite(1300,300,20,20)
+  //Change(s1Health,healthH1)
+ // s1Health.scale = 0.25
+ // s1Health.ve
+  
+  
   s1.army.addAnimation("up",horseUp) 
   s2.army.addAnimation("up",horseUp) 
   s3.army.addAnimation("up",horseUp) 
@@ -124,21 +135,21 @@ function draw() {
    coins = 100 
   }
    
-  changeDirection(s1,invisible1,0,-7,"up",horseUp)
-  changeDirection(s2,invisible1,0,-7,"up",horseUp)
-  changeDirection(s3,invisible1,0,-7,"up",horseUp)
+  changeDirection(s1,invisible1,0,-7,"up",horseUp,hlth1)
+  changeDirection(s2,invisible1,0,-7,"up",horseUp,hlth2)
+  changeDirection(s3,invisible1,0,-7,"up",horseUp,hlth3)
 
-  changeDirection(s1,invisible2,-7,0,"left",horseImg)
-  changeDirection(s2,invisible2,-7,0,"left",horseImg)
-  changeDirection(s3,invisible2,-7,0,"left",horseImg)
+  changeDirection(s1,invisible2,-7,0,"left",horseImg,hlth1)
+  changeDirection(s2,invisible2,-7,0,"left",horseImg,hlth2)
+  changeDirection(s3,invisible2,-7,0,"left",horseImg,hlth3)
 
-  changeDirection(s1,invisible3,0,7,"down",horseDown)
-  changeDirection(s2,invisible3,0,7,"down",horseDown)
-  changeDirection(s3,invisible3,0,7,"down",horseDown)
+  changeDirection(s1,invisible3,0,7,"down",horseDown,hlth1)
+  changeDirection(s2,invisible3,0,7,"down",horseDown,hlth2)
+  changeDirection(s3,invisible3,0,7,"down",horseDown,hlth3)
 
-  changeDirection(s1,invisible4,-7,0,"left",horseImg)
-  changeDirection(s2,invisible4,-7,0,"left",horseImg)
-  changeDirection(s3,invisible4,-7,0,"left",horseImg)
+  changeDirection(s1,invisible4,-7,0,"left",horseImg,hlth1)
+  changeDirection(s2,invisible4,-7,0,"left",horseImg,hlth2)
+  changeDirection(s3,invisible4,-7,0,"left",horseImg,hlth3)
 
 //  healthBar(s2,healthH2,20,50,0.25)
 //  healthBar(s2,healthH3,20,1)
@@ -169,6 +180,11 @@ function draw() {
     }
 
     healthBar(castle,healthC,30,70,0.25)
+    //healthBar(s1,healthH1,30,70,0.25)
+
+   // healthBar(s1,healthH1,30,70,0.25)
+  //  console.log(healthSprite.velocityY,healthSprite.velocityX)
+  //  image(h10,s1.x,s1.y,75,75)
 
 
   fill("red");
@@ -267,11 +283,16 @@ function createRoad(){
   castle.scale = 0.6;
 }
 
-function changeDirection(object,obstacle,velX,velY,str,image){
+function changeDirection(object,obstacle,velX,velY,str,image,bar){
   if(object.army.isTouching(obstacle)){
     object.army.velocityX=velX
     object.army.velocityY=velY
     object.army.changeAnimation(str,image)
+    bar.army.velocityX = object.army.velocityX;
+    bar.army.velocityY = object.army.velocityY;
+    console.log("bar",bar.velocityX,bar.velocityX)
+  //  console.log("enem",object.army.velocityX,object.army.velocityX)
+  console.log(bar);
   }
 }
 
@@ -294,42 +315,55 @@ function create(image,Array1){
 
 function healthBar(sprite,health,upX,upY,scale){
   healthSprite = createSprite(sprite.x+upX,sprite.y-upY)
-  healthSprite.velocityX = sprite.velocityX;
-  healthSprite.velocityY = sprite.velocityY;
   healthSprite.scale = scale
-  healthSprite.addAnimation("10",h10)
-  healthSprite.addAnimation("9",h9)
-  healthSprite.addAnimation("8",h8)
-  healthSprite.addAnimation("7",h7)
-  healthSprite.addAnimation("6",h6)
-  healthSprite.addAnimation("5",h5)
-  healthSprite.addAnimation("4",h4)
-  healthSprite.addAnimation("3",h3)
-  healthSprite.addAnimation("2",h2)
-  healthSprite.addAnimation("1",h1)
-  healthSprite.addAnimation("0",h0)
   if(health===10){
-    healthSprite.changeAnimation("10",h10)
+    healthSprite.addImage("10",h10)
   }else if(health===9){
-    healthSprite.changeAnimation("9",h9);
+    healthSprite.addImage("9",h9);
   }else if(health===8){
-    healthSprite.changeAnimation("8",h8);
+    healthSprite.addImage("8",h8);
   }else if(health===7){
-    healthSprite.changeAnimation("7",h7);
+    healthSprite.addImage("7",h7);
   }else if(health===6){
-    healthSprite.changeAnimation("6",h6);
+    healthSprite.addImage("6",h6);
   }else if(health===5){
-    healthSprite.changeAnimation("5",h5);
+    healthSprite.addImage("5",h5);
   }else if(health===4){
-    healthSprite.changeAnimation("4",h4);
+    healthSprite.addImage("4",h4);
   }else if(health===3){
-    healthSprite.changeAnimation("3",h3);
+    healthSprite.addImage("3",h3);
   }else if(health===2){
-    healthSprite.changeAnimation("2",h2);
+    healthSprite.addImage("2",h2);
   }else if(health===1){
-    healthSprite.changeAnimation("1",h1);
+    healthSprite.addImage("1",h1);
   }else if(health===0){
-    healthSprite.changeAnimation("0",h0);
+    healthSprite.addImage("0",h0);
+  }
+}
+
+function Change(sprite,health){
+  if(health===10){
+    sprite.addImage("10",h10)
+  }else if(health===9){
+    sprite.addImage("9",h9);
+  }else if(health===8){
+    sprite.addImage("8",h8);
+  }else if(health===7){
+    sprite.addImage("7",h7);
+  }else if(health===6){
+    sprite.addImage("6",h6);
+  }else if(health===5){
+    sprite.addImage("5",h5);
+  }else if(health===4){
+    sprite.addImage("4",h4);
+  }else if(health===3){
+    sprite.addImage("3",h3);
+  }else if(health===2){
+    sprite.addImage("2",h2);
+  }else if(health===1){
+    sprite.addImage("1",h1);
+  }else if(health===0){
+    sprite.addImage("0",h0);
   }
 }
 
