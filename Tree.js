@@ -12,6 +12,7 @@ class obstacle{
         this.obstacle.addImage(image)
         this.obstacle.scale = scale
         this.id = id
+        obstGrp.add(this.obstacle)
         }else{
           console.log("obstacle no: "+ id +"...I am dead")
         }

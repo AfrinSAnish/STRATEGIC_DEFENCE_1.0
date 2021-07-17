@@ -1,7 +1,7 @@
 var castle,invisible1
 var coins = 0
 var gameState = "start";
-var roadGrp,obstacleGrp,horseGrp;
+var roadGrp,obstGrp;
 var s1,s2,s3,s4,s5;
 var pressed = 0;
 var roadImg;
@@ -63,6 +63,9 @@ h0 = loadImage("Images/newHBar/1.png")
 function setup() {
   createCanvas(1300,575);
 
+  roadGrp = new Group();
+  obstGrp = new Group();
+
   pond = createSprite(300,450,50,50)
   pond.addAnimation("animation",water)
   pond.scale = 0.6
@@ -81,16 +84,12 @@ function setup() {
   invisible4 = createSprite(480,550,75,2)
   invisible4.shapeColor = "black"  
 
-  roadGrp = new Group();
-  treeGrp = new Group();
-  horseGrp = new Group();
-
   banner=createSprite(1130,500,50,50)
   banner.addImage(bannerImg)
   banner.scale=0.25
 
   archer = createSprite(1220,500)
-  archer.scale = 0.5;
+  archer.scale = 0.45;
 
   tower = createSprite(1160,505)
   tower.scale = 0.25
@@ -120,6 +119,8 @@ function setup() {
 
   if(gameState === "start"){
   healthC = 10;
+  Stage1();
+  coins = 100 
   }
 
 }
@@ -131,8 +132,7 @@ function draw() {
   if(gameState === "start"){
     createNonTrees();
     createArmy();
-    Stage1();
-   coins = 100 
+
   }
    
   changeDirection(s1,invisible1,0,-7,"up",horseUp,hlth1)
@@ -169,14 +169,17 @@ function draw() {
     if(s1.army.isTouching(castle)){
       healthC = healthC-1;
       s1.army.destroy();
+      hlth1.army.destroy();
     }
      if(s2.army.isTouching(castle)){
       healthC = healthC-1;
       s2.army.destroy();
+      hlth2.army.destroy();
     }
     if(s3.army.isTouching(castle)){
       healthC = healthC-1;
       s3.army.destroy();
+      hlth3.army.destroy();
     }
 
     healthBar(castle,healthC,30,70,0.25)
@@ -272,11 +275,11 @@ function createArmy(){
 }
 
 function createRoad(){
-  road1 = new Road(1040,385,550,30)
-  road2 = new Road(765,250,30,300)
-  road3 = new Road(620,115,300,30)
-  road4 = new Road(485,325,30,400)
-  road5 = new Road(305,540,390,30)
+  road1 = new Road(1040,385,550,30,roadGrp)
+  road2 = new Road(765,250,30,300,roadGrp)
+  road3 = new Road(620,115,300,30,roadGrp)
+  road4 = new Road(485,325,30,400,roadGrp)
+  road5 = new Road(305,540,390,30,roadGrp)
 
   castle = createSprite(130,460,50,50)
   castle.addImage(casImg)
@@ -298,19 +301,27 @@ function changeDirection(object,obstacle,velX,velY,str,image,bar){
 
 function mouseClicked(){
 if(selectDef==="Tower"&&coins>=15){
-  create(towerImg,towerArray)
+  create(towerImg,towerArray,0.25)
 }else if(selectDef==="Arch"&&coins>=5){
-  create(archerImg,archerArray)
+  create(archerImg,archerArray,0.35)
 }
 }
 
-function create(image,Array1){
+function create(image,Array1,scale){
+  if(mouseX>990&&mouseY>440){
+   // return false;
+  }else{
   var arch= createSprite(mouseX,mouseY,10,10)
+  if(arch.isTouching(obstGrp)){
+    arch.destroy();
+  }else{
   arch.addImage(image)
-  arch.scale = 0.7
+  arch.scale = scale;
   var position=[arch.x,arch.y]
   Array1.push(position)
   pressed = 0;
+}
+  }
 }
 
 function healthBar(sprite,health,upX,upY,scale){
