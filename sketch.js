@@ -68,28 +68,32 @@ function setup() {
 
   pond = createSprite(300,450,50,50)
   pond.addAnimation("animation",water)
-  pond.scale = 0.6
+  pond.scale = 0.4
 
   createRoad();
 
   invisible1 = createSprite(745,360,2,75)
   invisible1.shapeColor = "black"  
+  invisible1.visible = false;
   
   invisible2 = createSprite(780,75,75,2)
   invisible2.shapeColor = "black"  
+  invisible2.visible = false;
 
   invisible3 = createSprite(460,100,2,75)
   invisible3.shapeColor = "black"  
+  invisible3.visible = false;
    
   invisible4 = createSprite(480,550,75,2)
   invisible4.shapeColor = "black"  
+  invisible4.visible = false;
 
   banner=createSprite(1130,500,50,50)
   banner.addImage(bannerImg)
   banner.scale=0.25
 
   archer = createSprite(1220,500)
-  archer.scale = 0.45;
+  archer.scale = 0.5;
 
   tower = createSprite(1160,505)
   tower.scale = 0.25
@@ -182,7 +186,7 @@ function draw() {
       hlth3.army.destroy();
     }
 
-    healthBar(castle,healthC,30,70,0.25)
+    healthBar(castle,healthC,-20,80,0.25)
     //healthBar(s1,healthH1,30,70,0.25)
 
    // healthBar(s1,healthH1,30,70,0.25)
@@ -236,13 +240,15 @@ function Stage1(){
 }
 
 function createNonTrees(){
- createForest(220,75,75,50,sTree1,0.3,75,75)
+ createForest(220,75,75,50,sTree1,0.13,75,75)
  createForest(220,50,20,90,sHouse,0.17,75,75)
- createForest(220,50,620,500,sHouse,0.17,75,75)
- createForest(200,50,950,230,sTree3,0.25,75,50)
- createForest(200,50,70,300,sTree3,0.25,75,50)
- createForest(200,50,25,340,House3,0.15,75,50)
- createForest(200,50,875,275,House3,0.15,75,50)
+ createForest(220,50,840,90,House3,0.37,75,75)
+ createForest(220,50,900,65,sTree1,0.13,75,75)
+ createForest(220,50,620,530,sHouse,0.17,75,75)
+ createForest(200,50,950,230,sTree1,0.15,75,50)
+ createForest(200,50,70,250,sTree1,0.15,75,50)
+ createForest(200,50,25,300,House3,0.35,75,50)
+ createForest(200,50,875,275,House3,0.35,75,50)
 
 }
 
@@ -255,22 +261,22 @@ function createForest(endNumx,endNumy,iposX,iposY,image,scale,varX,varY){
 }
 
 function createArmy(){
-  if(mousePressedOver(archer)&&coins>=5){
+  if(mousePressedOver(archer)&&coins>=15){
       pressed = 1;
       selectDef ="Arch"
   }
 
   if(pressed===1){
   imageMode(CENTER)
-  image(archerImg,mouseX,mouseY,75,75)
+  image(archerImg,mouseX,mouseY,75,105)
   }
 
-  if(mousePressedOver(tower)&&coins>=15){
+  if(mousePressedOver(tower)&&coins>=5){
     pressed = 2;
     selectDef = "Tower"
 }
     if(pressed===2){
-    image(towerImg,mouseX,mouseY,75,75)
+    image(towerImg,mouseX,mouseY,45,90)
 }
 }
 
@@ -281,9 +287,9 @@ function createRoad(){
   road4 = new Road(485,325,30,400,roadGrp)
   road5 = new Road(305,540,390,30,roadGrp)
 
-  castle = createSprite(130,460,50,50)
+  castle = createSprite(130,520,50,50)
   castle.addImage(casImg)
-  castle.scale = 0.6;
+  castle.scale = 0.4;
 }
 
 function changeDirection(object,obstacle,velX,velY,str,image,bar){
@@ -302,8 +308,10 @@ function changeDirection(object,obstacle,velX,velY,str,image,bar){
 function mouseClicked(){
 if(selectDef==="Tower"&&coins>=15){
   create(towerImg,towerArray,0.25)
+  coins = coins - 5
 }else if(selectDef==="Arch"&&coins>=5){
   create(archerImg,archerArray,0.35)
+  coins = coins - 5
 }
 }
 
@@ -312,8 +320,12 @@ function create(image,Array1,scale){
    // return false;
   }else{
   var arch= createSprite(mouseX,mouseY,10,10)
-  if(arch.isTouching(obstGrp)){
+  var invisible = createSprite(mouseX,mouseY,200,200)
+  invisible.visible = false;
+  
+  if(arch.isTouching(obstGrp)||arch.isTouching(roadGrp)){
     arch.destroy();
+    invisible1.destroy();
   }else{
   arch.addImage(image)
   arch.scale = scale;
