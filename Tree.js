@@ -14,7 +14,7 @@ class obstacle{
         this.id = id
         obstGrp.add(this.obstacle)
         }else{
-          console.log("obstacle no: "+ id +"...I am dead")
+        //  console.log("obstacle no: "+ id +"...I am dead")
         }
     }
 }

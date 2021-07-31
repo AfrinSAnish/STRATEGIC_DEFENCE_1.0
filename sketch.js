@@ -20,14 +20,17 @@ var horse_x_pos=1300
 var rockLife = 0;
 var treeLife = 0;
 var speed = 10
-var towerLife = 100;
 var level = 1;
 var horse1;
 var enemyNum = 5;
 var archerArray = [];
 var towerArray = [];
 
+var id= 0
+var tower_id
+
 var selectDef=""
+var tower_type="A"
 
 function preload(){
 casImg = loadImage("Images/castle.png")
@@ -58,6 +61,11 @@ h3 = loadImage("Images/newHBar/4.png")
 h2 = loadImage("Images/newHBar/3.png")
 h1 = loadImage("Images/newHBar/2.png")
 h0 = loadImage("Images/newHBar/1.png")
+
+arrow_l = loadImage("Images/arrow_l.png")
+arrow_r = loadImage("Images/arrow_r.png")
+arrow_u = loadImage("Images/archer_u.png")
+arrow_d = loadImage("Images/arrow_d.png")
 }
 
 function setup() {
@@ -138,6 +146,9 @@ function draw() {
     createArmy();
 
   }
+
+  console.log(id)
+  console.log(tower_type)
    
   changeDirection(s1,invisible1,0,-7,"up",horseUp,hlth1)
   changeDirection(s2,invisible1,0,-7,"up",horseUp,hlth2)
@@ -158,13 +169,13 @@ function draw() {
 //  healthBar(s2,healthH2,20,50,0.25)
 //  healthBar(s2,healthH3,20,1)
 
-  if(coins>=20){
+  if(coins>=5){
     tower.addImage(towerImg)
     }else{
       tower.addImage(towerBlack)
     }
 
-  if(coins>=5){
+  if(coins>=15){
     archer.addImage(archerImg)
     }else{
       archer.addImage(archerBlack)
@@ -174,6 +185,7 @@ function draw() {
       healthC = healthC-1;
       s1.army.destroy();
       hlth1.army.destroy();
+     // castleP
     }
      if(s2.army.isTouching(castle)){
       healthC = healthC-1;
@@ -190,7 +202,6 @@ function draw() {
     //healthBar(s1,healthH1,30,70,0.25)
 
    // healthBar(s1,healthH1,30,70,0.25)
-  //  console.log(healthSprite.velocityY,healthSprite.velocityX)
   //  image(h10,s1.x,s1.y,75,75)
 
 
@@ -203,7 +214,7 @@ function draw() {
 
   fill("WHITE")
   textSize(15)
-  text(towerLife,1054,505)
+  text(healthC,1054,505)
 
   fill("WHITE")
   textSize(15)
@@ -299,20 +310,25 @@ function changeDirection(object,obstacle,velX,velY,str,image,bar){
     object.army.changeAnimation(str,image)
     bar.army.velocityX = object.army.velocityX;
     bar.army.velocityY = object.army.velocityY;
-    console.log("bar",bar.velocityX,bar.velocityX)
-  //  console.log("enem",object.army.velocityX,object.army.velocityX)
-  console.log(bar);
   }
 }
 
 function mouseClicked(){
 if(selectDef==="Tower"&&coins>=15){
   create(towerImg,towerArray,0.25)
+  tower_type = "A" + id
   coins = coins - 5
+  var position=[mouseX,mouseY]
+  towerArray.push(position)
+
 }else if(selectDef==="Arch"&&coins>=5){
   create(archerImg,archerArray,0.35)
+  tower_type = "B" + id
   coins = coins - 5
+  var position=[mouseX,mouseY]
+  archerArray.push(position)
 }
+
 }
 
 function create(image,Array1,scale){
@@ -320,14 +336,22 @@ function create(image,Array1,scale){
    // return false;
   }else{
   var arch= createSprite(mouseX,mouseY,10,10)
-  var invisible = createSprite(mouseX,mouseY,200,200)
-  invisible.visible = false;
+  id++
+ tower_id = "Tower"+id
+ tower_id = createSprite(mouseX,mouseY,200,200)
+
+ tower_id.visible = false;
+  
+ // if(tower_id.isTouching(s1)||tower_id.isTouching(s2)||tower_id.isTouching(s3)){
+    spawnArrows();
+ // }
   
   if(arch.isTouching(obstGrp)||arch.isTouching(roadGrp)){
     arch.destroy();
-    invisible1.destroy();
+  //  invisible1.destroy();
   }else{
   arch.addImage(image)
+ // 
   arch.scale = scale;
   var position=[arch.x,arch.y]
   Array1.push(position)
@@ -388,5 +412,21 @@ function Change(sprite,health){
   }else if(health===0){
     sprite.addImage("0",h0);
   }
+}
+
+function spawnArrows(){
+ if(frameCount%1===0){
+  for(var i=0;i<towerArray.length;i++){
+    var arrow=createSprite(towerArray[i][0],towerArray[i][1],30,10)
+    arrow.addImage(arrow_l)
+    arrow.scale=0.3
+    arrow.lifetime=200
+
+   // if(arrow.x-)
+    arrow.velocityX=9
+
+
+  }
+}
 }
 
